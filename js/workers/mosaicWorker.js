@@ -1,48 +1,7 @@
-/**
- * Created by kylekan on 8/05/2016.
- */
 importScripts('../modules/constants.js', '../modules/http.js',
-    '../modules/colorTools.js', '../models/tile.js', '../models/mosaicRowUI.js');
+    '../modules/colorTools.js', '../modules/mosaicWorkerHelper.js',
+    '../models/tile.js', '../models/mosaicRowUI.js');
 
-var MosaicWorkerHelper = (function (CONSTANTS, HTTP) {
-    'use strict';
-    var privateObj = {},
-        publicObj = {};
-
-    privateObj = {
-        returnResponse: function (response) {
-            return response;
-        },
-        handleError: function (error) {
-            alert('Had error fetching tiles: ' + error);
-        },
-        returnImgRow: function (mosaicRow, svgContent) {
-            //postMessage('<div class="mosaic-row">' + svgContent + '</div>');
-            mosaicRow.addContent(svgContent);
-            postMessage(mosaicRow.row);
-        },
-        getTile: function (hexColor, currentTileIndex) {
-            return HTTP.get(CONSTANTS.get('COLOR_URL') + hexColor, currentTileIndex).then(
-                privateObj.returnResponse,
-                privateObj.handleError
-            );
-        }
-    };
-
-    publicObj = {
-        returnImgRow: privateObj.returnImgRow,
-        getTile: privateObj.getTile
-    };
-
-
-    return publicObj;
-}(CONSTANTS, HTTP));
-
-/**
- * e.data[0] = coordinate x
- * e.data[1] = coordinate y
- * @param e
- */
 onmessage = function (e) {
     'use strict';
 

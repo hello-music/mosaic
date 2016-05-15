@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!--CONSTANTS.js needs to be loaded before client.js, if build into one file then no issue-->
-    <script type="text/javascript" src="js/modules/CONSTANTS.js"></script>
-    <script type="text/javascript" src="js/mosaic.js"></script>
-    <script type="text/javascript" src="js/client.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <title>Mosaic</title>
 </head>
 <body>
-<!-- Edit me. -->
-<input type="file" id="source-image">
-<div class="flex-row-start">
+<div class="header">
+    <div class="logo"></div>
+    <div id="input-button" class="submit-button">
+        Add a photo
+        <input type="file" id="source-image" class="hide">
+    </div>
+</div>
+<div class="flex-row-centre img-area">
     <canvas id="img-canvas"></canvas>
     <div id="mosaic-container"></div>
 </div>
+
+<div class="footer"></div>
+
+<!--CONSTANTS.js, mosaicProcessor.js and mosaicPageController.js need
+    to be loaded before client.js with this order, if build into one file then no issue-->
+<script type="text/javascript" src="js/modules/CONSTANTS.js"></script>
+<script type="text/javascript" src="js/modules/mosaicProcessor.js"></script>
+<script type="text/javascript" src="js/controllers/mosaicPageController.js"></script>
+<script type="text/javascript" src="js/mosaic.js"></script>
+<script type="text/javascript" src="js/client.js"></script>
 </body>
 </html>
