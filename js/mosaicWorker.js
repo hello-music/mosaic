@@ -23,6 +23,9 @@ onmessage = function (e) {
         imgData = data.imgData,
         tileHeight = data.tileHeight,
         tileWidth = data.tileWidth,
+        imgWidth = data.imgWidth,
+        imgHeight = data.imgHeight,
+        tileRowYInImg = data.tileRowYInImg,
         pixelData = imgData.data,
         numOfTilesX = data.numOfTilesX,
         numOfPixelsPerTile = tileWidth * tileHeight,
@@ -41,16 +44,33 @@ onmessage = function (e) {
     for (var iCurrentTileX = 0; iCurrentTileX < numOfTilesX; iCurrentTileX++) { // loop over each tile in the row
         //avg
         xTileInImg = iCurrentTileX * tileWidth;
+        tileRowYInImg = data.tileRowYInImg; // reset current tile row Y in img
+        numOfPixelsPerTile = tileWidth * tileHeight; // reset num of pixels of the current tile
+        // reset r, g, b
         r = 0;
         g = 0;
         b = 0;
+
         for (var y = 0; y < tileHeight; y++) { // loop over each row within the tile
-            xStartIndex = (y * tileWidth + xTileInImg) * 4;
+            xStartIndex = y * tileWidth + xTileInImg;
+            tileRowYInImg += y;
+            if(tileRowYInImg > imgHeight){
+                numOfPixelsPerTile = y * tileWidth;
+                break;
+            }
             for (var x = 0; x < tileWidth; x++) { // loop over each pixel in the row
-                dataIndex = xStartIndex + x * 4;
-                r += pixelData[dataIndex];
-                g += pixelData[dataIndex + 1];
-                b += pixelData[dataIndex + 2]
+                dataIndex = xStartIndex + x;
+                if(dataIndex < imgWidth){
+                    dataIndex *= 4;
+                    r += pixelData[dataIndex];
+                    g += pixelData[dataIndex + 1];
+                    b += pixelData[dataIndex + 2]
+                }
+                else{
+                    numOfPixelsPerTile -= (tileWidth - x);
+                    break;
+                }
+
             }
         }
         //calculate avg rgb

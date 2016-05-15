@@ -22,28 +22,43 @@ var MosaicProcessor = (function () {
              * @param imgHeight
              */
             drawMosaic: function (canvasCtx, mosaicRowNum, mosaicContainer) {
-                var tileYInImg = mosaicRowNum * privateObj.tileHeight,
-                    imgRowData = canvasCtx.getImageData(0, tileYInImg, privateObj.imgWidth, privateObj.tileHeight),
+                var // tile
+                    tileWidth = privateObj.tileWidth,
+                    tileHeight = privateObj.tileHeight,
+                    // img
+                    imgWidth = privateObj.imgWidth,
+                    imgHeight = privateObj.imgHeight,
+                    // num of tiles
+                    numOfTilesX = privateObj.numOfTilesX,
+                    numOfTilesY = privateObj.numOfTilesY,
+                    // tile upper left pixel y
+                    tileRowYInImg = mosaicRowNum * tileHeight,
+
+                    imgRowData = canvasCtx.getImageData(0, tileRowYInImg, imgWidth, tileHeight),
                     rowImagesString = '',
                     worker = privateObj.mosaicWorker = privateObj.mosaicWorker || new Worker("js/mosaicWorker.js");
 
                 worker.postMessage({
-                    numOfTilesX: privateObj.numOfTilesX,
+                    numOfTilesX: numOfTilesX,
+                    tileRowYInImg: tileRowYInImg,
                     imgData: imgRowData,
-                    tileWidth: privateObj.tileWidth,
-                    tileHeight: privateObj.tileHeight
+                    tileWidth: tileWidth,
+                    tileHeight: tileHeight,
+                    imgWidth: imgWidth,
+                    imgHeight: imgHeight
                 });
 
                 worker.onmessage = function (e) {
+                    //draw current row
+                    rowImagesString += e.data; // e.data is in string of div containing the svgs, e.g. '<div><svg></svg><div>'
+                    mosaicContainer.innerHTML += rowImagesString;
+                    //check if need to draw next row
                     mosaicRowNum++;
-                    if (mosaicRowNum == privateObj.numOfTilesY) { // all the image rows have been processed
+                    if (mosaicRowNum == numOfTilesY) { // all the image rows have been processed
                         worker.terminate();
-                        worker = null;
+                        worker = privateObj.mosaicWorker = null;
                     }
                     else {
-                        //draw current row
-                        rowImagesString += e.data; // e.data is in string of div containing the svgs, e.g. '<div><svg></svg><div>'
-                        mosaicContainer.innerHTML += rowImagesString;
                         // draw next row
                         privateObj.drawMosaic(canvasCtx, mosaicRowNum, mosaicContainer);
                     }
@@ -74,7 +89,7 @@ var MosaicProcessor = (function () {
 /**
  * Current page controller
  */
-var PageController = (function (MosaicProcessor, CONSTANTS) {
+var PageController = (function (MosaicProcessor) {
     var privateObj = {
         tileWidth: 0,
         tileHeight: 0,
@@ -88,6 +103,26 @@ var PageController = (function (MosaicProcessor, CONSTANTS) {
             inputElement.onchange = this.handleFiles;
         },
 
+        processImgMosaic: function (img, canvasCtx, tileWidth, tileHeight) {
+            var imgWidth = img.width,
+                imgHeight = img.height,
+                numOfTilesX = Math.ceil(imgWidth / tileWidth),
+                numOfTilesY = Math.ceil(imgHeight / tileHeight),
+                mosaicRowNum = 0,
+                mosaicContainer = document.getElementById('mosaic-container');
+
+            mosaicContainer.innerHTML = ''; // initilise mosaic container content
+
+            mosaicContainer.style.width = numOfTilesX * tileWidth + 'px';
+            mosaicContainer.style.height = numOfTilesY * tileHeight + 'px';
+
+
+            // initilise the Mosaic Processor
+            MosaicProcessor.init(tileWidth, tileHeight, imgWidth, imgHeight, numOfTilesX, numOfTilesY);
+            //draw Mosaic row by row
+            MosaicProcessor.drawMosaic(canvasCtx, mosaicRowNum, mosaicContainer);
+        },
+
         /**
          * process img
          */
@@ -96,14 +131,10 @@ var PageController = (function (MosaicProcessor, CONSTANTS) {
                 selectedFile = fileList[0];
 
             if (selectedFile) {
-                var img = document.createElement("img"),
+                var img = new Image(),
                     reader = new FileReader(),
                     canvas = document.getElementById("img-canvas"),
                     ctx = canvas.getContext("2d");
-
-                document.getElementById('img-container').innerHTML = CONSTANTS.EMPTY_STRING; // empty previous content
-                document.getElementById('img-container').appendChild(img); // add img selected to page
-
 
                 //var hRatio = canvas.width / img.width    ;
                 //var vRatio = canvas.height / img.height  ;
@@ -114,28 +145,10 @@ var PageController = (function (MosaicProcessor, CONSTANTS) {
                         img.src = reader.result;
                         adjustCanvasSize(canvas, img);
                         ctx.drawImage(img, 0, 0);
-                        //var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                        processImgMosaic(img, ctx, privateObj.tileWidth, privateObj.tileHeight);
+                        privateObj.processImgMosaic(img, ctx, privateObj.tileWidth, privateObj.tileHeight);
                     };
                 })(img);
 
-                function processImgMosaic(img, canvasCtx, tileWidth, tileHeight) {
-                    var imgWidth = img.width,
-                        imgHeight = img.height,
-                        numOfTilesX = Math.ceil(imgWidth / tileWidth),
-                        numOfTilesY = Math.ceil(imgHeight / tileHeight),
-                        mosaicRowNum = 0,
-                        mosaicContainer = document.getElementById('mosaic-container');
-
-                    mosaicContainer.style.width = numOfTilesX * tileWidth + 'px';
-                    mosaicContainer.style.height = numOfTilesX * tileHeight + 'px';
-
-
-                    // initilise the Mosaic Processor
-                    MosaicProcessor.init(tileWidth, tileHeight, imgWidth, imgHeight, numOfTilesX, numOfTilesY);
-                    //draw Mosaic row by row
-                    MosaicProcessor.drawMosaic(canvasCtx, mosaicRowNum, mosaicContainer);
-                }
 
                 reader.readAsDataURL(selectedFile);
             }
@@ -161,7 +174,7 @@ var PageController = (function (MosaicProcessor, CONSTANTS) {
     };
 
     return publicObj;
-}(MosaicProcessor, CONSTANTS));
+}(MosaicProcessor));
 
 document.onreadystatechange = function () {
     if (document.readyState === 'interactive') {

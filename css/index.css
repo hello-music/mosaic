@@ -1,11 +1,11 @@
-/*.flex-row-start{*/
-/*display: -webkit-flex;*/
-/*display: flex;*/
-/*-webkit-flex-direction: row;*/
-/*flex-direction: row;*/
-/*-webkit-align-items: flex-start;*/
-/*align-items: flex-start;*/
-/*}*/
+.flex-row-start {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+}
 div.mosaic-row{
     /*width: 100%;*/
 }
