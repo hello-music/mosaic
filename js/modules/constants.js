@@ -3,27 +3,18 @@
  */
 var CONSTANTS = (function () {
     'use strict';
-    var privateObj = {
-        COLOR_URL: '/color/'
+    var privateObj = {},
+        publicObj = {};
+    privateObj = {
+        COLOR_URL: '/color/',
+        MOSAIC_WORKER_JS_FILE_URL: 'js/workers/mosaicWorker.js',
+        get: function (key) {
+            return privateObj[key];
+        }
+    };
+    publicObj = {
+        get: privateObj.get
     };
 
-    /**
-     * deep copy of a object
-     * @param fromObj
-     * @returns {{}}
-     */
-    function copiedObject(fromObj) {
-        var toObj = {},
-            key = '';
-
-        for (key in fromObj) {
-            if (fromObj[key] !== undefined) {
-                toObj[key] = fromObj[key];
-            }
-        }
-
-        return toObj;
-    }
-
-    return copiedObject(privateObj);
+    return publicObj;
 }());

@@ -3,7 +3,7 @@
 /**
  * Module that processes img to mosaic
  */
-var MosaicProcessor = (function () {
+var MosaicProcessor = (function (CONSTANTS) {
     'use strict';
     var privateObj = {},
         publicObj = {};
@@ -16,6 +16,23 @@ var MosaicProcessor = (function () {
         imgHeight: 0,
         mosaicWorker: null,
         canvasCtx: null,
+        /**
+         * Get the Mosaic Worker, will create a new one if it is null
+         * @returns {null} mosaicWorker
+         */
+        getMosaicWorker: function () {
+            privateObj.mosaicWorker = privateObj.mosaicWorker || new Worker(CONSTANTS.get('MOSAIC_WORKER_JS_FILE_URL'));
+            return privateObj.mosaicWorker;
+        },
+        clearWorker: function () {
+            if (privateObj.mosaicWorker !== null) {
+                privateObj.mosaicWorker.terminate();
+                privateObj.mosaicWorker = null;
+            }
+        },
+        drawCurrentRow: function (mosaicContainer, rowImagesString) {
+            mosaicContainer.innerHTML += rowImagesString;// rowImagesString is in string of div containing the svgs, e.g. '<div><svg></svg><div>'
+        },
 
         /**
          * Draw mosaic row by row
@@ -37,8 +54,7 @@ var MosaicProcessor = (function () {
                 tileRowYInImg = mosaicRowNum * tileHeight,
 
                 imgRowData = canvasCtx.getImageData(0, tileRowYInImg, imgWidth, tileHeight),
-                rowImagesString = '',
-                worker = privateObj.mosaicWorker || new Worker("js/workers/mosaicWorker.js");
+                worker = privateObj.getMosaicWorker();
 
             worker.postMessage({
                 numOfTilesX: numOfTilesX,
@@ -52,13 +68,11 @@ var MosaicProcessor = (function () {
 
             worker.onmessage = function (e) {
                 //draw current row
-                rowImagesString += e.data; // e.data is in string of div containing the svgs, e.g. '<div><svg></svg><div>'
-                mosaicContainer.innerHTML += rowImagesString;
+                privateObj.drawCurrentRow(mosaicContainer, e.data);
                 //check if need to draw next row
                 mosaicRowNum += 1;
                 if (mosaicRowNum === numOfTilesY) { // all the image rows have been processed
-                    worker.terminate();
-                    worker = privateObj.mosaicWorker = null;
+                    privateObj.clearWorker();
                 } else {
                     // draw next row
                     privateObj.drawMosaic(canvasCtx, mosaicRowNum, mosaicContainer);
@@ -84,7 +98,7 @@ var MosaicProcessor = (function () {
     };
 
     return publicObj;
-}());
+}(CONSTANTS));
 
 /**
  * Current page controller
@@ -102,7 +116,7 @@ var PageController = (function (MosaicProcessor) {
          * add bindings to dom elements
          */
         addBindings: function () {
-            var inputElement = document.getElementById("source-image");
+            var inputElement = document.querySelector("#source-image");
             //inputElement.addEventListener("change", this.handleFiles, false);
 
             inputElement.onchange = this.handleFiles;
@@ -124,7 +138,7 @@ var PageController = (function (MosaicProcessor) {
                 numOfTilesX = Math.ceil(imgWidth / tileWidth),
                 numOfTilesY = Math.ceil(imgHeight / tileHeight),
                 mosaicRowNum = 0,
-                mosaicContainer = document.getElementById('mosaic-container');
+                mosaicContainer = document.querySelector('#mosaic-container');
 
             mosaicContainer.innerHTML = ''; // initilise mosaic container content
 
@@ -146,7 +160,7 @@ var PageController = (function (MosaicProcessor) {
                 selectedFile = fileList[0],
                 img = new Image(),
                 reader = new FileReader(),
-                canvas = document.getElementById("img-canvas"),
+                canvas = document.querySelector("#img-canvas"),
                 ctx = canvas.getContext("2d");
 
             if (selectedFile) {

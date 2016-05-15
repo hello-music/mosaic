@@ -19,7 +19,6 @@ function Tile(width, height) {
                 r += rowPixelData[dataIndex];
                 g += rowPixelData[dataIndex + 1];
                 b += rowPixelData[dataIndex + 2];
-
             }
         }
         //calculate avg rgb
