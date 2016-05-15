@@ -2,14 +2,10 @@
  * Defining all the constant values
  */
 var CONSTANTS = (function () {
+    'use strict';
     var privateObj = {
-        EMPTY_STRING: '',
-        SVG_OPEN_TAG: '<svg xmlns="http://www.w3.org/2000/svg">',
-        SVG_CLOSE_TAG: '</svg>',
         COLOR_URL: '/color/'
     };
-
-    return copiedObject(privateObj);
 
     /**
      * deep copy of a object
@@ -17,12 +13,17 @@ var CONSTANTS = (function () {
      * @returns {{}}
      */
     function copiedObject(fromObj) {
-        var toObj = {};
+        var toObj = {},
+            key = '';
 
         for (key in fromObj) {
-            toObj[key] = fromObj[key];
+            if (fromObj[key] !== undefined) {
+                toObj[key] = fromObj[key];
+            }
         }
 
         return toObj;
     }
+
+    return copiedObject(privateObj);
 }());
