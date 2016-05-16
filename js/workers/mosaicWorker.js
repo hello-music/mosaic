@@ -1,5 +1,5 @@
 importScripts('../modules/constants.js', '../modules/http.js',
-    '../modules/colorTools.js', '../modules/mosaicWorkerHelper.js',
+    '../modules/colorTool.js', '../modules/mosaicWorkerHelper.js',
     '../models/tile.js', '../models/mosaicRowUI.js');
 
 onmessage = function (e) {
@@ -40,7 +40,7 @@ onmessage = function (e) {
         }
         //calculate avg rgb of current tile
         avgRGB = currentTile.getAvgRBG(pixelData, imgWidth, currentTileIndex);
-        hexColor = ColorTools.rgbToHex(avgRGB.r, avgRGB.g, avgRGB.b);
+        hexColor = ColorTool.rgbToHex(avgRGB.r, avgRGB.g, avgRGB.b);
         MosaicWorkerHelper.getTile(hexColor, currentTileIndex).then(function (response) {
             rowContent[response.index] = response.response;
             completedAjax += 1;

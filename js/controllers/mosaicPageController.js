@@ -1,7 +1,7 @@
 /**
  * Current page controller
  */
-var MosaicPageController = (function (MosaicProcessor) {
+var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
     'use strict';
 
     var privateObj = {},
@@ -39,12 +39,15 @@ var MosaicPageController = (function (MosaicProcessor) {
                 numOfTilesX = Math.ceil(imgWidth / tileWidth),
                 numOfTilesY = Math.ceil(imgHeight / tileHeight),
                 mosaicRowNum = 0,
-                mosaicContainer = document.querySelector('#mosaic-container');
+                mosaicContainer = document.querySelector('#mosaic-container'),
+                widthPercent = (1 / numOfTilesX * 100).toFixed(2) + '%';
 
             mosaicContainer.innerHTML = ''; // initilise mosaic container content
 
             //mosaicContainer.style.width = numOfTilesX * tileWidth + 'px';
             //mosaicContainer.style.height = numOfTilesY * tileHeight + 'px';
+
+            privateObj.updateSVGWidth(widthPercent);
 
 
             // initilise the Mosaic Processor
@@ -81,6 +84,14 @@ var MosaicPageController = (function (MosaicProcessor) {
 
                 reader.readAsDataURL(selectedFile);
             }
+        },
+
+        updateSVGWidth: function (widthPercent) {
+            var sheet = StyleSheetTool.getStyleSheet(0),
+                sheetLength = StyleSheetTool.getCssRuleLength(sheet),
+                css = '.mosaic-row svg { width: ' + widthPercent + '}';
+
+            StyleSheetTool.addCSS(sheet, css, sheetLength);
         }
     };
 
@@ -93,4 +104,4 @@ var MosaicPageController = (function (MosaicProcessor) {
     };
 
     return publicObj;
-}(MosaicProcessor));
+}(MosaicProcessor, StyleSheetTool));

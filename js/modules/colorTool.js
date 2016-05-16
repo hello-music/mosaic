@@ -1,4 +1,4 @@
-var ColorTools = (function () {
+var ColorTool = (function () {
     'use strict';
     var privateObj = {},
         publicObj = {};
