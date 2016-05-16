@@ -43,8 +43,8 @@ var MosaicPageController = (function (MosaicProcessor) {
 
             mosaicContainer.innerHTML = ''; // initilise mosaic container content
 
-            mosaicContainer.style.width = numOfTilesX * tileWidth + 'px';
-            mosaicContainer.style.height = numOfTilesY * tileHeight + 'px';
+            //mosaicContainer.style.width = numOfTilesX * tileWidth + 'px';
+            //mosaicContainer.style.height = numOfTilesY * tileHeight + 'px';
 
 
             // initilise the Mosaic Processor

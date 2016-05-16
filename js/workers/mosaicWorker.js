@@ -31,7 +31,6 @@ onmessage = function (e) {
 
     //calculate avg color
     for (currentTileIndex; currentTileIndex < numOfTilesInRow; currentTileIndex += 1) { // loop over each tile in the row
-        //set current tile
         currentTileXInImg = currentTileIndex * tileWidth; // reset current tile row X in img
         // adjust tile width
         if (currentTileXInImg + tileWidth > imgWidth) {

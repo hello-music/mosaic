@@ -16,6 +16,10 @@ body {
     display: none;
 }
 
+.full-width {
+    width: 100%;
+}
+
 .flex-row-start {
     display: -webkit-flex;
     display: flex;
@@ -67,23 +71,21 @@ body {
     margin: 30px auto 0 auto;
     width: 80%;
     border: 1px solid white;
-    height: 300px;
-    height: auto;
     min-height: 300px;
 }
 
 .img-container {
     border: 2px solid white;
+    min-height: 300px;
     width: 50%;
-    height: 100%;
 }
 
 .img-container.original {
-
+    background: red;
 }
 
 .img-container.mosaic {
-
+    background: green;
 }
 
 .footer {

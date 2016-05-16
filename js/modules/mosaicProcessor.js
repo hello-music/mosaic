@@ -33,11 +33,11 @@ var MosaicProcessor = (function (CONSTANTS) {
         },
 
         /**
-         * Draw mosaic row by row
+         *
          * @param canvasCtx
          * @param mosaicRowNum
-         * @param imgWidth
-         * @param imgHeight
+         * @param mosaicContainer
+         * @param convertToPercent
          */
         drawMosaic: function (canvasCtx, mosaicRowNum, mosaicContainer) {
             var tileWidth = privateObj.tileWidth,// tile
