@@ -6,15 +6,17 @@
 </head>
 <body>
 <div class="header">
-    <div class="logo"></div>
+    <div class="logo">
+        <img src="img/canva_logo.png">
+    </div>
     <div id="input-button" class="submit-button">
         Add a photo
         <input type="file" id="source-image" class="hide">
     </div>
 </div>
 <div class="flex-row-centre img-area">
-    <canvas id="img-canvas"></canvas>
-    <div id="mosaic-container"></div>
+    <canvas id="img-canvas" class="img-container original"></canvas>
+    <div id="mosaic-container" class="img-container mosaic"></div>
 </div>
 
 <div class="footer"></div>
