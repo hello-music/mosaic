@@ -14,13 +14,18 @@ var StyleSheetTool = (function () {
 
         getCssRuleLength: function (sheet) {
             return sheet.cssRules.length;
+        },
+
+        addScale: function (ele, x, y) {
+            ele.style.transform = 'scale(' + x + ',' + y + ')';
         }
     };
 
     publicObj = {
         getStyleSheet: privateObj.getStyleSheet,
         addCSS: privateObj.addCSS,
-        getCssRuleLength: privateObj.getCssRuleLength
+        getCssRuleLength: privateObj.getCssRuleLength,
+        addScale: privateObj.addScale
     };
 
     return publicObj;

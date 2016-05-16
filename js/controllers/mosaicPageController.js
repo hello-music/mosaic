@@ -10,13 +10,20 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
     privateObj = {
         tileWidth: 0,
         tileHeight: 0,
+        // this is the button visible on the page to add a photo, it will trigger the hiddenInput click event
+        addImgButton: document.querySelector('#input-button'),
+        // the hidden input that selects a file
+        hiddenInput: document.querySelector("#source-image"),
+        // the canvas that will draw the selected img
+        canvas: document.querySelector("#img-canvas"),
+        // the container that will display the mosaic img
+        mosaicContainer: document.querySelector('#mosaic-container'),
         /**
          * add bindings to dom elements
          */
         addBindings: function () {
-            var inputElement = document.querySelector("#source-image"),
-                inputButton = document.querySelector('#input-button');
-            //inputElement.addEventListener("change", this.handleFiles, false);
+            var inputElement = privateObj.hiddenInput,
+                inputButton = privateObj.addImgButton;
             inputButton.onclick = function () {
                 inputElement.click();
             };
@@ -39,16 +46,15 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
                 numOfTilesX = Math.ceil(imgWidth / tileWidth),
                 numOfTilesY = Math.ceil(imgHeight / tileHeight),
                 mosaicRowNum = 0,
-                mosaicContainer = document.querySelector('#mosaic-container'),
-                widthPercent = (1 / numOfTilesX * 100).toFixed(2) + '%';
+                mosaicContainer = privateObj.mosaicContainer,
+                imgCanvas = privateObj.canvas,
+                mosaicContainerHeight = numOfTilesY * tileHeight;
 
             mosaicContainer.innerHTML = ''; // initilise mosaic container content
 
-            //mosaicContainer.style.width = numOfTilesX * tileWidth + 'px';
-            //mosaicContainer.style.height = numOfTilesY * tileHeight + 'px';
-
-            privateObj.updateSVGWidth(widthPercent);
-
+            //mosaicContainer.style.width = mosaicContainerWidth + 'px';
+            mosaicContainer.style.height = mosaicContainerHeight + 'px';
+            //privateObj.scaleMosaic(mosaicContainer, scale);
 
             // initilise the Mosaic Processor
             MosaicProcessor.init(tileWidth, tileHeight, imgWidth, imgHeight, numOfTilesX, numOfTilesY);
@@ -64,7 +70,7 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
                 selectedFile = fileList[0],
                 img = new Image(),
                 reader = new FileReader(),
-                canvas = document.querySelector("#img-canvas"),
+                canvas = privateObj.canvas,
                 ctx = canvas.getContext("2d");
 
             if (selectedFile) {
@@ -86,12 +92,8 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
             }
         },
 
-        updateSVGWidth: function (widthPercent) {
-            var sheet = StyleSheetTool.getStyleSheet(0),
-                sheetLength = StyleSheetTool.getCssRuleLength(sheet),
-                css = '.mosaic-row svg { width: ' + widthPercent + '}';
-
-            StyleSheetTool.addCSS(sheet, css, sheetLength);
+        scaleMosaic: function (mosaicContainer, scale) {
+            StyleSheetTool.addScale(mosaicContainer, scale, scale);
         }
     };
 
