@@ -1,10 +1,12 @@
 /**
+ * @module MosaicProcessor
  * Module that processes img to mosaic
  */
 var MosaicProcessor = (function (CONSTANTS) {
     'use strict';
-    var privateObj = {},
-        publicObj = {};
+
+    var privateObj = {}, // private module properties and methods
+        publicObj = {}; // public API interface obj
 
     privateObj = {
 

@@ -1,7 +1,8 @@
 var MosaicWorkerHelper = (function (CONSTANTS, HTTP) {
     'use strict';
-    var privateObj = {},
-        publicObj = {};
+
+    var privateObj = {}, // private module properties and methods
+        publicObj = {}; // public API interface obj
 
     privateObj = {
         returnResponse: function (response) {

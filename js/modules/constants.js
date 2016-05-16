@@ -3,8 +3,10 @@
  */
 var CONSTANTS = (function () {
     'use strict';
-    var privateObj = {},
-        publicObj = {};
+
+    var privateObj = {}, // private module properties and methods
+        publicObj = {}; // public API interface obj
+
     privateObj = {
         COLOR_URL: '/color/',
         MOSAIC_WORKER_JS_FILE_URL: 'js/workers/mosaicWorker.js',

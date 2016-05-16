@@ -3,7 +3,9 @@
  */
 var HTTP = (function () {
     'use strict';
-    var privateObj, publicObj;
+
+    var privateObj = {}, // private module properties and methods
+        publicObj = {}; // public API interface obj
 
     privateObj = {
         get: function (url, index) {

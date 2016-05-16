@@ -1,12 +1,21 @@
 /**
+ * @module MosaicPageController
  * Current page controller
  */
-var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
+var MosaicPageController = (function (MosaicProcessor) {
     'use strict';
 
-    var privateObj = {},
-        publicObj = {};
+    var privateObj = {}, // private module properties and methods
+        publicObj = {}; // public API interface obj
 
+    /**
+     * @type {{tileWidth: number, tileHeight: number, addImgButton: Element, hiddenInput: Element, canvas: Element,
+     *     mosaicContainer: Element, initMosaicContainer: privateObj.initMosaicContainer, addBindings:
+     *     privateObj.addBindings, copyWidthAndHeight: privateObj.copyWidthAndHeight, processImgMosaic:
+     *     privateObj.processImgMosaic, handleFiles: privateObj.handleFiles}}
+     *
+     * @todo improvements: dom elements could be wrapped into different models
+     */
     privateObj = {
         tileWidth: 0,
         tileHeight: 0,
@@ -18,8 +27,21 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
         canvas: document.querySelector("#img-canvas"),
         // the container that will display the mosaic img
         mosaicContainer: document.querySelector('#mosaic-container'),
+
         /**
-         * add bindings to dom elements
+         * Initialise the mosaic container -> empty it and set its height
+         */
+        initMosaicContainer: function (height) {
+            var mosaicContainer = privateObj.mosaicContainer;
+            mosaicContainer.innerHTML = '';
+            mosaicContainer.style.height = height + 'px';
+        },
+        /**
+         * Add bindings to dom elements
+         *
+         * Click on the {@link privateObj.addImgButton} will trigger the {@link privateObj.hiddenInput}
+         *
+         * When a different file is selected it will trigger the {@link privateObj.handleFiles} function
          */
         addBindings: function () {
             var inputElement = privateObj.hiddenInput,
@@ -32,14 +54,20 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
 
         /**
          * Adjust the destination size(width and height) based on the source size(
-         * @param destination
-         * @param source
+         * @param {Element} destination - dom element
+         * @param {Element} source - dom element
          */
         copyWidthAndHeight: function (destination, source) {
             destination.height = source.height;
             destination.width = source.width;
         },
-
+        /**
+         * Process image and start drawing mosaic by {@link module:MosaicProcessor}
+         * @param {Image} img
+         * @param {Object} canvasCtx
+         * @param {number} tileWidth
+         * @param {number} tileHeight
+         */
         processImgMosaic: function (img, canvasCtx, tileWidth, tileHeight) {
             var imgWidth = img.width,
                 imgHeight = img.height,
@@ -47,14 +75,10 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
                 numOfTilesY = Math.ceil(imgHeight / tileHeight),
                 mosaicRowNum = 0,
                 mosaicContainer = privateObj.mosaicContainer,
-                imgCanvas = privateObj.canvas,
                 mosaicContainerHeight = numOfTilesY * tileHeight;
 
-            mosaicContainer.innerHTML = ''; // initilise mosaic container content
-
-            //mosaicContainer.style.width = mosaicContainerWidth + 'px';
-            mosaicContainer.style.height = mosaicContainerHeight + 'px';
-            //privateObj.scaleMosaic(mosaicContainer, scale);
+            // initilise mosaic container content
+            privateObj.initMosaicContainer(mosaicContainerHeight);
 
             // initilise the Mosaic Processor
             MosaicProcessor.init(tileWidth, tileHeight, imgWidth, imgHeight, numOfTilesX, numOfTilesY);
@@ -63,7 +87,9 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
         },
 
         /**
-         * process img
+         * Read file and start processing the mosaic img
+         *
+         * @todo may consider separating the read file and start processing img logic into two functions
          */
         handleFiles: function () {
             var fileList = this.files,
@@ -74,10 +100,6 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
                 ctx = canvas.getContext("2d");
 
             if (selectedFile) {
-                //var hRatio = canvas.width / img.width    ;
-                //var vRatio = canvas.height / img.height  ;
-                //var ratio  = Math.min ( hRatio, vRatio );
-
                 reader.onload = (function (img) {
                     return function () {
                         img.src = reader.result;
@@ -87,17 +109,17 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
                     };
                 }(img));
 
-
                 reader.readAsDataURL(selectedFile);
             }
-        },
-
-        scaleMosaic: function (mosaicContainer, scale) {
-            StyleSheetTool.addScale(mosaicContainer, scale, scale);
         }
     };
 
     publicObj = {
+        /**
+         * Public interface: set tile width and height and initialise dom event bindings
+         * @param {number} tileWidth
+         * @param {number} tileHeight
+         */
         init: function (tileWidth, tileHeight) {
             privateObj.tileWidth = tileWidth;
             privateObj.tileHeight = tileHeight;
@@ -106,4 +128,4 @@ var MosaicPageController = (function (MosaicProcessor, StyleSheetTool) {
     };
 
     return publicObj;
-}(MosaicProcessor, StyleSheetTool));
+}(MosaicProcessor));
