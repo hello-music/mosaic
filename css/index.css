@@ -46,13 +46,14 @@ body {
 }
 
 /*Content*/
-.row{
-    /*width: 80%;*/
-    /*margin: 20px auto 0 auto;*/
+
+.row {
+    width: 80%;
+    margin: 20px auto 0 auto;
 }
 
-.item{
-    /*float: left;*/
+.item {
+    float: left;
 }
 
 div.mosaic-row svg {

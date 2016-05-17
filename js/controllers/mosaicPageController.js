@@ -30,10 +30,9 @@ var MosaicPageController = (function (MosaicProcessor) {
 
         initCanvas: function (img) {
             var canvas = privateObj.canvas;
-            canvas.width = Math.floor(window.innerWidth / 2);
+            //canvas.width = Math.floor(window.innerWidth / 2);
+            canvas.width = Math.floor(document.querySelector('.row').clientWidth / 2) - privateObj.tileWidth;
             canvas.height = (img.height / img.width) * canvas.width;
-            //canvas.width = img.width;
-            //canvas.height = img.height;
         },
 
         getCanvasContext: function () {
@@ -109,6 +108,9 @@ var MosaicPageController = (function (MosaicProcessor) {
             if (selectedFile) {
                 reader.onloadstart = function () {
                     console.log('uploading');
+                };
+                reader.onabort = function () {
+                    console.log('canceled');
                 };
                 reader.onload = (function (img) {
                     console.log('uploaded');
