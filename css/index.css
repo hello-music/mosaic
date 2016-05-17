@@ -16,31 +16,7 @@ body {
     display: none;
 }
 
-.full-width {
-    width: 100%;
-}
-
-.flex-row-start {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-align-items: flex-start;
-    align-items: flex-start;
-}
-
-.flex-row-centre {
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row; /* works with row or column */
-    flex-direction: row;
-    -webkit-align-items: center;
-    align-items: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-}
-
-/*Specific*/
+/*Header*/
 
 .header {
     height: 100px;
@@ -69,39 +45,18 @@ body {
     top: 30px;
 }
 
+/*Content*/
+.row{
+    /*width: 80%;*/
+    /*margin: 20px auto 0 auto;*/
+}
 
-/*div.mosaic-row {*/
-    /*width: 100%;*/
-/*}*/
+.item{
+    float: left;
+}
 
 div.mosaic-row svg {
     float: left;
     height: 100%;
-}
-
-svg {
     display: block;
-}
-
-
-/*flex box solution*/
-.row{
-    display: -webkit-flex;
-    display: flex;
-    -webkit-flex-direction: row;
-    flex-direction: row;
-    -webkit-justify-content: center;
-    justify-content: center;
-    -webkit-align-items: flex-start;
-    align-items: flex-start;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-}
-
-.item {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    border: 2px solid white;
 }

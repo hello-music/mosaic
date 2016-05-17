@@ -94,7 +94,9 @@ var MosaicProcessor = (function (CONSTANTS) {
             privateObj.numOfTilesY = numOfTilesY;
         },
 
-        drawMosaic: privateObj.drawMosaic
+        drawMosaic: privateObj.drawMosaic,
+
+        stopDrawing: privateObj.clearWorker
     };
 
     return publicObj;
