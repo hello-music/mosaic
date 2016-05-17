@@ -12,8 +12,8 @@ var MosaicProcessor = (function (CONSTANTS) {
 
         tileWidth: 0,
         tileHeight: 0,
-        imgWidth: 0,
-        imgHeight: 0,
+        canvasWidth: 0,
+        canvasHeight: 0,
         mosaicWorker: null,
         canvasCtx: null,
         /**
@@ -45,15 +45,15 @@ var MosaicProcessor = (function (CONSTANTS) {
             var tileWidth = privateObj.tileWidth,// tile
                 tileHeight = privateObj.tileHeight,
             // img
-                imgWidth = privateObj.imgWidth,
-                imgHeight = privateObj.imgHeight,
+                canvasWidth = privateObj.canvasWidth,
+                canvasHeight = privateObj.canvasHeight,
             // num of tiles
                 numOfTilesX = privateObj.numOfTilesX,
                 numOfTilesY = privateObj.numOfTilesY,
             // tile row upper left pixel y
                 tileRowYInImg = mosaicRowNum * tileHeight,
 
-                imgRowData = canvasCtx.getImageData(0, tileRowYInImg, imgWidth, tileHeight),
+                imgRowData = canvasCtx.getImageData(0, tileRowYInImg, canvasWidth, tileHeight),
                 worker = privateObj.getMosaicWorker();
 
             worker.postMessage({
@@ -62,8 +62,8 @@ var MosaicProcessor = (function (CONSTANTS) {
                 imgData: imgRowData,
                 tileWidth: tileWidth,
                 tileHeight: tileHeight,
-                imgWidth: imgWidth,
-                imgHeight: imgHeight
+                canvasWidth: canvasWidth,
+                canvasHeight: canvasHeight
             });
 
             worker.onmessage = function (e) {
@@ -82,13 +82,13 @@ var MosaicProcessor = (function (CONSTANTS) {
     };
     publicObj = {
 
-        init: function (tileWidth, tileHeight, imgWidth, imgHeight, numOfTilesX, numOfTilesY) {
+        init: function (tileWidth, tileHeight, canvasWidth, canvasHeight, numOfTilesX, numOfTilesY) {
             // tile
             privateObj.tileWidth = tileWidth;
             privateObj.tileHeight = tileHeight;
             // img
-            privateObj.imgWidth = imgWidth;
-            privateObj.imgHeight = imgHeight;
+            privateObj.canvasWidth = canvasWidth;
+            privateObj.canvasHeight = canvasHeight;
             //num of tiles
             privateObj.numOfTilesX = numOfTilesX;
             privateObj.numOfTilesY = numOfTilesY;
