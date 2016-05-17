@@ -3,7 +3,15 @@ function Tile(width, height) {
     var that = this;
     this.width = width;
     this.height = height;
-    this.getAvgRBG = function (rowPixelData, imgWidth, currentTileIndex) {
+    /**
+     * Get the avg RGB values of this tile
+     * @param {Array} rowPixelData
+     * @param {number} canvasWidth
+     * @param {number} currentTileIndex
+     * @param {?number} unadjustedTileWidth - the default tile width, in case last col tile width < default tile width
+     * @returns {{r: number, g: number, b: number}} - color r, g, b values
+     */
+    this.getAvgRBG = function (rowPixelData, canvasWidth, currentTileIndex, unadjustedTileWidth) {
         var x = 0,
             y = 0,
             r = 0,
@@ -13,9 +21,10 @@ function Tile(width, height) {
             tileWidth = that.width,
             tileHeight = that.height,
             numOfPixels = getNumOfPixels(tileWidth, tileHeight);
+        unadjustedTileWidth = unadjustedTileWidth || tileWidth;
         for (y; y < tileHeight; y += 1) { // loop over each row within the tile
             for (x = 0; x < tileWidth; x += 1) { // loop over each pixel in the tile row
-                dataIndex = getDataIndex(x, y, imgWidth, tileWidth, currentTileIndex);
+                dataIndex = getDataIndex(x, y, canvasWidth, unadjustedTileWidth, currentTileIndex);
                 r += rowPixelData[dataIndex];
                 g += rowPixelData[dataIndex + 1];
                 b += rowPixelData[dataIndex + 2];

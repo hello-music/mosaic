@@ -39,7 +39,7 @@ onmessage = function (e) {
             currentTile.width = tileWidth;
         }
         //calculate avg rgb of current tile
-        avgRGB = currentTile.getAvgRBG(pixelData, canvasWidth, currentTileIndex);
+        avgRGB = currentTile.getAvgRBG(pixelData, canvasWidth, currentTileIndex, tileWidth);
         hexColor = ColorTool.rgbToHex(avgRGB.r, avgRGB.g, avgRGB.b);
         MosaicWorkerHelper.getTile(hexColor, currentTileIndex).then(function (response) {
             rowContent[response.index] = response.response;
