@@ -7,7 +7,6 @@ var MosaicPageController = (function (MosaicProcessor) {
 
     var privateObj = {}, // private module properties and methods
         publicObj = {}; // public API interface obj
-
     /**
      * @type {{tileWidth: number, tileHeight: number, addImgButton: Element, hiddenInput: Element, canvas: Element,
      *     mosaicContainer: Element, initMosaicContainer: privateObj.initMosaicContainer, addBindings:
@@ -79,14 +78,16 @@ var MosaicPageController = (function (MosaicProcessor) {
             return Math.ceil(privateObj.canvas.height / privateObj.tileHeight);
         },
         /**
-         * Get calculated mosaic container height based on the number of tiles {@link privateObj.getNumOfTilesY} in col and the tile height {@link privateObj.tileHeight}
+         * Get calculated mosaic container height based on the number of tiles {@link privateObj.getNumOfTilesY} in col
+         * and the tile height {@link privateObj.tileHeight}
          * @returns {number}
          */
         getCalculatedMosaicContainerHeight: function () {
             return privateObj.getNumOfTilesY() * privateObj.tileHeight;
         },
         /**
-         * Get calculated mosaic container width based on the number of tiles {@link privateObj.getNumOfTilesX} in row and the tile height {@link privateObj.tileWidth}
+         * Get calculated mosaic container width based on the number of tiles {@link privateObj.getNumOfTilesX} in row
+         * and the tile height {@link privateObj.tileWidth}
          * @returns {number}
          */
         getCalculatedMosaicContainerWidth: function () {
@@ -133,8 +134,14 @@ var MosaicPageController = (function (MosaicProcessor) {
                 mosaicRowNum = 0; // starting row number of the mosaic tiled image;
 
             privateObj.initMosaicContainer(); // initilise mosaic container: empty its content and set width and height
-            MosaicProcessor.init(privateObj.tileWidth, privateObj.tileHeight, canvas.width, canvas.height, privateObj.getNumOfTilesX(), privateObj.getNumOfTilesY()); // initilise the Mosaic Processor
-            MosaicProcessor.drawMosaic(privateObj.getCanvasContext(), mosaicRowNum, privateObj.mosaicContainer); //draw Mosaic row by row
+            MosaicProcessor.init(privateObj.tileWidth,
+                privateObj.tileHeight,
+                canvas.width,
+                canvas.height,
+                privateObj.getNumOfTilesX(),
+                privateObj.getNumOfTilesY()); // initilise the Mosaic Processor
+            // start drawing the mosaic image
+            MosaicProcessor.drawMosaic(privateObj.getCanvasContext(), mosaicRowNum, privateObj.mosaicContainer);
         },
 
         /**
