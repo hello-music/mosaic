@@ -1,6 +1,7 @@
 /**
- * @module MosaicPageController
  * Current page controller
+ * @module MosaicPageController
+ * needs {@link module:MosaicProcessor} and {@link module:StyleTool}
  */
 var MosaicPageController = (function (MosaicProcessor, StyleTool) {
     'use strict';
