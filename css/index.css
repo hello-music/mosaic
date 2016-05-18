@@ -17,7 +17,6 @@ body {
 }
 
 /*Header*/
-
 .header {
     height: 100px;
     background-color: #3F4651;
@@ -46,7 +45,6 @@ body {
 }
 
 /*Content*/
-
 .row {
     width: 80%;
     margin: 20px auto 0 auto;
