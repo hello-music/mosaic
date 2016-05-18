@@ -1,3 +1,9 @@
+/**
+ * Tile model that contains
+ * @param {number} width
+ * @param {number} height
+ * @constructor Tile
+ */
 function Tile(width, height) {
     'use strict';
     var that = this;
@@ -5,9 +11,9 @@ function Tile(width, height) {
     this.height = height;
     /**
      * Get the avg RGB values of this tile
-     * @param {Array} rowPixelData
+     * @param {Array} rowPixelData - the pixel data of the row that this tile sits in
      * @param {number} canvasWidth
-     * @param {number} currentTileIndex
+     * @param {number} currentTileIndex - index of this tile in the tile row
      * @param {?number} unadjustedTileWidth - the default tile width, in case last col tile width < default tile width
      * @returns {{r: number, g: number, b: number}} - color r, g, b values
      */
@@ -41,10 +47,25 @@ function Tile(width, height) {
         };
     };
     //private method
+    /**
+     * Get the tile row img data index of current pixel of this tile
+     * @param {number} x - current pixel position x in this tile
+     * @param {number} y - current pixel position y in this tile
+     * @param {number} imgWidth
+     * @param {number} tileWidth
+     * @param {number} currentTileIndex - index of this tile in the tile row
+     * @returns {number}
+     */
     function getDataIndex(x, y, imgWidth, tileWidth, currentTileIndex) {
         return (y * imgWidth + x + currentTileIndex * tileWidth) * 4;
     }
 
+    /**
+     * Get the number of pixels of this tile
+     * @param {number} width
+     * @param {number} height
+     * @returns {number}
+     */
     function getNumOfPixels(width, height) {
         return width * height;
     }
