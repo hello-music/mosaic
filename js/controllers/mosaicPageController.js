@@ -28,6 +28,8 @@ var MosaicPageController = (function (MosaicProcessor) {
         mosaicContainer: document.querySelector('#mosaic-container'),
         // the container that contains both the canvas and the mosaic container
         normalNMosaicRow: document.querySelector('#normal-n-mosaic-row'),
+        // backdrop
+        backdrop: document.querySelector('#backdrop'),
         /**
          * Get half of the {@link privateObj.normalNMosaicRow} clientWidth and minus a tile width to make sure this row
          * can container both the canvas and the mosaic img
@@ -156,7 +158,6 @@ var MosaicPageController = (function (MosaicProcessor) {
                 reader = new FileReader();
 
             if (selectedFile) {
-                // todo: start backdrop
                 reader.onloadstart = function () {
                     console.log('uploading');
                 };
@@ -164,18 +165,33 @@ var MosaicPageController = (function (MosaicProcessor) {
                 reader.onabort = function () {
                     console.log('canceled');
                 };
-                reader.onload = (function (img) {
+                reader.onprogress = function () {
+                    console.log('in progress');
+                };
+                // todo: start backdrop
+                //reader.onload = (function (img) {
+                //    // todo: remove backdrop
+                //    console.log('uploaded');
+                //    return function () {
+                //        MosaicProcessor.stopDrawing();
+                //        img.src = reader.result;
+                //    };
+                //}(img));
+
+                reader.onload = function () {
                     // todo: remove backdrop
                     console.log('uploaded');
-                    return function () {
-                        MosaicProcessor.stopDrawing();
-                        img.src = reader.result;
-                        privateObj.initCanvas(img);// initialise the width and height of canvas
-                        privateObj.drawImgOnCanvas(img);// draw image on the canvas, scale up/down for the screen size
-                        // on canvas
-                        privateObj.processImgMosaic();
-                    };
-                }(img));
+                    MosaicProcessor.stopDrawing();
+                    img.src = reader.result;
+                };
+
+                img.onload = function () {
+                    console.log('img loaded');
+                    privateObj.initCanvas(img);// initialise the width and height of canvas
+                    privateObj.drawImgOnCanvas(img);// draw image on the canvas, scale up/down for the screen size
+                    // on  canvas
+                    privateObj.processImgMosaic();
+                }
 
                 reader.readAsDataURL(selectedFile);
             }

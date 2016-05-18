@@ -15,6 +15,10 @@ body {
     display: none;
 }
 
+.show {
+    display: block;
+}
+
 /*Header*/
 .header {
     height: 100px;
@@ -58,4 +62,20 @@ div.mosaic-row svg {
     float: left;
     height: 100%;
     display: block;
+}
+
+/*Backdrop*/
+#backdrop {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#backdrop .content{
+    font-size: 60px;
+    width: 100%;
+    text-align: center;
+    margin-top: 30%;
 }
