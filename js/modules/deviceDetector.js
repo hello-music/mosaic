@@ -5,7 +5,18 @@ var DeviceDetector = (function () {
 
     privateObj = {
         isChrome: function () {
-            return true;
+            return navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
+        },
+
+        isIOS: function () {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         }
     };
+
+    publicObj = {
+        isChrome: privateObj.isChrome,
+        isIOS: privateObj.isIOS
+    };
+
+    return publicObj;
 }());
