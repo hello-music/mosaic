@@ -1,6 +1,6 @@
 /**
+ * Processes img to mosaic
  * @module MosaicProcessor
- * Module that processes img to mosaic
  */
 var MosaicProcessor = (function (CONSTANTS) {
     'use strict';
@@ -8,8 +8,13 @@ var MosaicProcessor = (function (CONSTANTS) {
     var privateObj = {}, // private module properties and methods
         publicObj = {}; // public API interface obj
 
+    /**
+     *
+     * @type {{tileWidth: number, tileHeight: number, canvasWidth: number, canvasHeight: number, mosaicWorker: null,
+     *     canvasCtx: null, getMosaicWorker: privateObj.getMosaicWorker, clearWorker: privateObj.clearWorker,
+     *     drawCurrentRow: privateObj.drawCurrentRow, drawMosaic: privateObj.drawMosaic}}
+     */
     privateObj = {
-
         tileWidth: 0,
         tileHeight: 0,
         canvasWidth: 0,
@@ -18,42 +23,53 @@ var MosaicProcessor = (function (CONSTANTS) {
         canvasCtx: null,
         /**
          * Get the Mosaic Worker, will create a new one if it is null
-         * @returns {null} mosaicWorker
+         * @returns {Worker} mosaicWorker {@link privateObj.mosaicWorker}
          */
         getMosaicWorker: function () {
             privateObj.mosaicWorker = privateObj.mosaicWorker || new Worker(CONSTANTS.get('MOSAIC_WORKER_JS_FILE_URL'));
             return privateObj.mosaicWorker;
         },
+        /**
+         * Terminate web worker {@link privateObj.mosaicWorker} and set it to null
+         */
         clearWorker: function () {
             if (privateObj.mosaicWorker !== null) {
                 privateObj.mosaicWorker.terminate();
                 privateObj.mosaicWorker = null;
             }
         },
-        drawCurrentRow: function (mosaicContainer, rowImagesString) {
-            mosaicContainer.innerHTML += rowImagesString;// rowImagesString is in string of div containing the svgs, e.g. '<div><svg></svg><div>'
-        },
-
         /**
+         * Draw current mosaic row on the mosaic img container
+         * @param {Element} mosaicContainer
+         * @param {string} rowImagesString
+         */
+        drawCurrentRow: function (mosaicContainer, rowImagesString) {
+            mosaicContainer.innerHTML += rowImagesString;// rowImagesString is in string of div containing the svgs,
+                                                         // e.g. '<div><svg></svg><div>'
+        },
+        /**
+         * Draw mosaic row in the mosaic container
          *
-         * @param canvasCtx
-         * @param mosaicRowNum
-         * @param mosaicContainer
-         * @param convertToPercent
+         * pass data to worker then get the mosaic row back
+         * @param canvasCtx - canvas context
+         * @param mosaicRowNum - the row number the current row in the tiled img
+         * @param mosaicContainer - the dom container that the mosaic img will be in
          */
         drawMosaic: function (canvasCtx, mosaicRowNum, mosaicContainer) {
-            var tileWidth = privateObj.tileWidth,// tile
+                // tile
+            var tileWidth = privateObj.tileWidth,
                 tileHeight = privateObj.tileHeight,
-            // img
+                // img
                 canvasWidth = privateObj.canvasWidth,
                 canvasHeight = privateObj.canvasHeight,
-            // num of tiles
+                // num of tiles
                 numOfTilesX = privateObj.numOfTilesX,
                 numOfTilesY = privateObj.numOfTilesY,
-            // tile row upper left pixel y
+                // tile row upper left pixel y
                 tileRowYInImg = mosaicRowNum * tileHeight,
-
+                // img row data of the tile row
                 imgRowData = canvasCtx.getImageData(0, tileRowYInImg, canvasWidth, tileHeight),
+                //worker that will be processing and returning the mosaic row
                 worker = privateObj.getMosaicWorker();
 
             worker.postMessage({
@@ -80,8 +96,20 @@ var MosaicProcessor = (function (CONSTANTS) {
             };
         }
     };
+    /**
+     * Public interface
+     * @type {{init: publicObj.init, drawMosaic: privateObj.drawMosaic, stopDrawing: privateObj.clearWorker}}
+     */
     publicObj = {
-
+        /**
+         * Initialise the private properties
+         * @param {number} tileWidth
+         * @param {number} tileHeight
+         * @param {number} canvasWidth
+         * @param {number} canvasHeight
+         * @param {number} numOfTilesX
+         * @param {number} numOfTilesY
+         */
         init: function (tileWidth, tileHeight, canvasWidth, canvasHeight, numOfTilesX, numOfTilesY) {
             // tile
             privateObj.tileWidth = tileWidth;
@@ -93,9 +121,13 @@ var MosaicProcessor = (function (CONSTANTS) {
             privateObj.numOfTilesX = numOfTilesX;
             privateObj.numOfTilesY = numOfTilesY;
         },
-
+        /**
+         * public api to draw the mosaic row
+         */
         drawMosaic: privateObj.drawMosaic,
-
+        /**
+         * public api to stop current worker
+         */
         stopDrawing: privateObj.clearWorker
     };
 
