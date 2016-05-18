@@ -27,39 +27,95 @@ var MosaicPageController = (function (MosaicProcessor) {
         canvas: document.querySelector("#img-canvas"),
         // the container that will display the mosaic img
         mosaicContainer: document.querySelector('#mosaic-container'),
-
-        initCanvas: function (img) {
-            var canvas = privateObj.canvas;
-            //canvas.width = Math.floor(window.innerWidth / 2);
-            canvas.width = Math.floor(document.querySelector('.row').clientWidth / 2) - privateObj.tileWidth;
-            canvas.height = (img.height / img.width) * canvas.width;
+        // the container that contains both the canvas and the mosaic container
+        normalNMosaicRow: document.querySelector('#normal-n-mosaic-row'),
+        /**
+         * Get half of the {@link privateObj.normalNMosaicRow} clientWidth and minus a tile width to make sure this row
+         * can container both the canvas and the mosaic img
+         * @returns {number} calculatedCanvasWidth
+         */
+        getCalculatedCanvasWidth: function () {
+            return Math.floor(privateObj.normalNMosaicRow.clientWidth / 2) - privateObj.tileWidth;
         },
-
+        /**
+         * Calculate the canvas height based on the img height/width ratio and the canvas width
+         * @param {number} canvasWidth
+         * @param {number} imgWidth
+         * @param {number} imgHeight
+         * @returns {number}
+         */
+        getCalculatedCanvasHeight: function (canvasWidth, imgWidth, imgHeight) {
+            return (imgHeight / imgWidth) * canvasWidth;
+        },
+        /**
+         * Initialise the width and height of the canvas baed on the image width and height
+         * @param {Image} img
+         */
+        initCanvas: function (img) {
+            var canvas = privateObj.canvas,
+                calculatedWidth = privateObj.getCalculatedCanvasWidth();
+            canvas.width = calculatedWidth;
+            canvas.height = privateObj.getCalculatedCanvasHeight(calculatedWidth, img.width, img.height);
+        },
+        /**
+         * Get the context of the {@link privateObj.canvas} canvas
+         * @returns {CanvasRenderingContext2D}
+         */
         getCanvasContext: function () {
             return privateObj.canvas.getContext('2d');
         },
-
+        /**
+         * Get the number of tiles in a row
+         * @returns {number}
+         */
+        getNumOfTilesX: function () {
+            return Math.ceil(privateObj.canvas.width / privateObj.tileWidth);
+        },
+        /**
+         * Get the number of tiles in a col
+         * @returns {number}
+         */
+        getNumOfTilesY: function () {
+            return Math.ceil(privateObj.canvas.height / privateObj.tileHeight);
+        },
+        /**
+         * Get calculated mosaic container height based on the number of tiles {@link privateObj.getNumOfTilesY} in col and the tile height {@link privateObj.tileHeight}
+         * @returns {number}
+         */
+        getCalculatedMosaicContainerHeight: function () {
+            return privateObj.getNumOfTilesY() * privateObj.tileHeight;
+        },
+        /**
+         * Get calculated mosaic container width based on the number of tiles {@link privateObj.getNumOfTilesX} in row and the tile height {@link privateObj.tileWidth}
+         * @returns {number}
+         */
+        getCalculatedMosaicContainerWidth: function () {
+            return privateObj.getNumOfTilesX() * privateObj.tileWidth;
+        },
+        /**
+         * Draw image on the {@link privateObj.canvas} canvas
+         * @param img
+         */
         drawImgOnCanvas: function (img) {
             privateObj.getCanvasContext().drawImage(img, 0, 0, img.width, img.height,
                 0, 0, privateObj.canvas.width, privateObj.canvas.height);
         },
-
         /**
          * Initialise the mosaic container -> empty it and set its height
          */
-        initMosaicContainer: function (width, height) {
+        initMosaicContainer: function () {
             var mosaicContainer = privateObj.mosaicContainer;
 
             mosaicContainer.innerHTML = '';
-            mosaicContainer.style.height = height + 'px';
-            mosaicContainer.style.width = width + 'px';
+            mosaicContainer.style.height = privateObj.getCalculatedMosaicContainerHeight() + 'px';
+            mosaicContainer.style.width = privateObj.getCalculatedMosaicContainerWidth() + 'px';
         },
         /**
          * Add bindings to dom elements
          *
          * Click on the {@link privateObj.addImgButton} will trigger the {@link privateObj.hiddenInput}
          *
-         * When a different file is selected it will trigger the {@link privateObj.handleFiles} function
+         * When a different file is selected it will trigger the {@link privateObj.handleFiles} handleFiles function
          */
         addBindings: function () {
             var inputElement = privateObj.hiddenInput,
@@ -71,26 +127,14 @@ var MosaicPageController = (function (MosaicProcessor) {
         },
         /**
          * Process image and start drawing mosaic by {@link module:MosaicProcessor}
-         * @param {Image} img
-         * @param {Element} canvas
-         * @param {number} tileWidth
-         * @param {number} tileHeight
          */
-        processImgMosaic: function (canvas, tileWidth, tileHeight) {
-            var canvasWidth = canvas.width,
-                canvasHeight = canvas.height,
-                numOfTilesX = Math.ceil(canvasWidth / tileWidth),
-                numOfTilesY = Math.ceil(canvasHeight / tileHeight),
-                mosaicRowNum = 0,
-                mosaicContainer = privateObj.mosaicContainer,
-                mosaicContainerHeight = numOfTilesY * tileHeight,
-                mosaicContainerWidth = numOfTilesX * tileWidth;
+        processImgMosaic: function () {
+            var canvas = privateObj.canvas,
+                mosaicRowNum = 0; // starting row number of the mosaic tiled image;
 
-            privateObj.initMosaicContainer(mosaicContainerWidth, mosaicContainerHeight); // initilise mosaic container width and height based
-            // initilise the Mosaic Processor
-            MosaicProcessor.init(tileWidth, tileHeight, canvasWidth, canvasHeight, numOfTilesX, numOfTilesY);
-            //draw Mosaic row by row
-            MosaicProcessor.drawMosaic(canvas.getContext('2d'), mosaicRowNum, mosaicContainer);
+            privateObj.initMosaicContainer(); // initilise mosaic container: empty its content and set width and height
+            MosaicProcessor.init(privateObj.tileWidth, privateObj.tileHeight, canvas.width, canvas.height, privateObj.getNumOfTilesX(), privateObj.getNumOfTilesY()); // initilise the Mosaic Processor
+            MosaicProcessor.drawMosaic(privateObj.getCanvasContext(), mosaicRowNum, privateObj.mosaicContainer); //draw Mosaic row by row
         },
 
         /**
@@ -102,17 +146,19 @@ var MosaicPageController = (function (MosaicProcessor) {
             var fileList = this.files,
                 selectedFile = fileList[0],
                 img = new Image(),
-                reader = new FileReader(),
-                canvas = privateObj.canvas;
+                reader = new FileReader();
 
             if (selectedFile) {
+                // todo: start backdrop
                 reader.onloadstart = function () {
                     console.log('uploading');
                 };
+                // todo: remove backdrop
                 reader.onabort = function () {
                     console.log('canceled');
                 };
                 reader.onload = (function (img) {
+                    // todo: remove backdrop
                     console.log('uploaded');
                     return function () {
                         MosaicProcessor.stopDrawing();
@@ -120,7 +166,7 @@ var MosaicPageController = (function (MosaicProcessor) {
                         privateObj.initCanvas(img); // initialise the width and height of canvas
                         privateObj.drawImgOnCanvas(img); // draw image on the canvas, scale up/down for the screen size
                         // on canvas
-                        privateObj.processImgMosaic(canvas, privateObj.tileWidth, privateObj.tileHeight);
+                        privateObj.processImgMosaic();
                     };
                 }(img));
 
