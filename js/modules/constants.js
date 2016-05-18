@@ -1,5 +1,7 @@
 /**
  * Defining all the constant values
+ *
+ * @module CONSTANTS
  */
 var CONSTANTS = (function () {
     'use strict';
@@ -10,11 +12,19 @@ var CONSTANTS = (function () {
     privateObj = {
         COLOR_URL: '/color/',
         MOSAIC_WORKER_JS_FILE_URL: 'js/workers/mosaicWorker.js',
+        /**
+         * Get value based on the key
+         * @param {string} key
+         * @returns {*} - value
+         */
         get: function (key) {
             return privateObj[key];
         }
     };
     publicObj = {
+        /**
+         * Public interface of the {@link privateObj.get} get method
+         */
         get: privateObj.get
     };
 
