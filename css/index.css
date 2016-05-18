@@ -90,7 +90,7 @@ div.mosaic-row svg {
 }
 
 /*Small Screen*/
-@media screen and (max-device-width: 800px) {
+@media screen and (max-device-width: 700px) {
 
     .logo img {
         min-width: 10%;
