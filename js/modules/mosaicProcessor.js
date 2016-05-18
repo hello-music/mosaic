@@ -97,7 +97,6 @@ var MosaicProcessor = (function (CONSTANTS) {
     };
     /**
      * Public interface
-     * @type {{init: publicObj.init, drawMosaic: privateObj.drawMosaic, stopDrawing: privateObj.clearWorker}}
      */
     publicObj = {
         /**

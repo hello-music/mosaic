@@ -160,29 +160,9 @@ var MosaicPageController = (function (MosaicProcessor, StyleTool) {
 
             if (selectedFile) {
                 reader.onloadstart = function () {
-                    console.log('uploading');
                     StyleTool.show(privateObj.backdrop);
                 };
-                // todo: remove backdrop
-                reader.onabort = function () {
-                    console.log('canceled');
-                };
-                reader.onprogress = function () {
-                    console.log('in progress');
-                };
-                // todo: start backdrop
-                //reader.onload = (function (img) {
-                //    // todo: remove backdrop
-                //    console.log('uploaded');
-                //    return function () {
-                //        MosaicProcessor.stopDrawing();
-                //        img.src = reader.result;
-                //    };
-                //}(img));
-
                 reader.onload = function () {
-                    // todo: remove backdrop
-                    console.log('uploaded');
                     StyleTool.hide(privateObj.backdrop);
                     MosaicProcessor.stopDrawing();
                     img.src = reader.result;

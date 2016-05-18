@@ -30,7 +30,7 @@ body {
     flex-direction: row;
 }
 
-.header .item{
+.header .item {
     width: 50%;
     align-self: center;
 }
@@ -90,11 +90,11 @@ div.mosaic-row svg {
 }
 
 /*Small Screen*/
-@media only screen and (max-width: 800px) {
+@media screen and (max-device-width: 800px) {
 
     .logo img {
         min-width: 10%;
-        max-width: 40%;
+        max-width: 30%;
     }
 
     #input-button.submit-button {

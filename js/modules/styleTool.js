@@ -3,6 +3,7 @@
  * @module StyleTool
  */
 var StyleTool = (function () {
+    'use strict';
     var privateObj = {},// private module properties and methods
         publicObj = {};// public API interface obj
 
