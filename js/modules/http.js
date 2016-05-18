@@ -1,5 +1,7 @@
 /**
- * Ajax Module
+ * Ajax Module that handles the ajax calls
+ *
+ * @module HTTP
  */
 var HTTP = (function () {
     'use strict';
@@ -8,6 +10,12 @@ var HTTP = (function () {
         publicObj = {}; // public API interface obj
 
     privateObj = {
+        /**
+         * Sends request to the targeted url and returns a promise
+         * @param {string} url
+         * @param {?number} index - index that can be used for further control by callers or this function itself
+         * @returns {Promise}
+         */
         get: function (url, index) {
             // Return a new promise.
             return new Promise(function (resolve, reject) {
@@ -43,6 +51,9 @@ var HTTP = (function () {
     };
 
     publicObj = {
+        /**
+         * Public interface of the {@see privateObj.get} private get method
+         */
         get: privateObj.get
     };
 
