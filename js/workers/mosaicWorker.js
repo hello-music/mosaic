@@ -1,3 +1,10 @@
+/**
+ * Web worker that will calculate avg rgb of one tile
+ * fetch the tile img from server and return to the Main thread
+ *
+ * @todo: improvements: use cached tile img pool, add new tile img to the pool then fetch from pool first then server
+ */
+
 importScripts('../modules/constants.js', '../modules/http.js',
     '../modules/colorTool.js', '../modules/mosaicWorkerHelper.js',
     '../models/tile.js', '../models/mosaicRowUI.js');

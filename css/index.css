@@ -9,7 +9,6 @@ body {
     background-color: #272c32;
     color: #868991;
     font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
 }
 
 .hide {
@@ -24,7 +23,7 @@ body {
 }
 
 .logo {
-    padding: 10px;
+    padding: 10px 0 0 30px;
 }
 
 .logo img {
@@ -40,8 +39,9 @@ body {
 
 #input-button.submit-button {
     position: absolute;
-    right: 0;
+    right: 30px;
     top: 30px;
+    font-size: 25px;
 }
 
 /*Content*/
