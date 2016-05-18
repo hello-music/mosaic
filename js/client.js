@@ -1,7 +1,7 @@
 document.onreadystatechange = function () {
     'use strict';
     if (document.readyState === 'complete') {
-        // document ready
+        // start the app
         MosaicPageController.init(TILE_WIDTH, TILE_HEIGHT);
     }
 };
