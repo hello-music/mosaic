@@ -2,7 +2,7 @@
  * @module MosaicPageController
  * Current page controller
  */
-var MosaicPageController = (function (MosaicProcessor) {
+var MosaicPageController = (function (MosaicProcessor, StyleTool) {
     'use strict';
 
     var privateObj = {},// private module properties and methods
@@ -160,6 +160,7 @@ var MosaicPageController = (function (MosaicProcessor) {
             if (selectedFile) {
                 reader.onloadstart = function () {
                     console.log('uploading');
+                    StyleTool.show(privateObj.backdrop);
                 };
                 // todo: remove backdrop
                 reader.onabort = function () {
@@ -181,6 +182,7 @@ var MosaicPageController = (function (MosaicProcessor) {
                 reader.onload = function () {
                     // todo: remove backdrop
                     console.log('uploaded');
+                    StyleTool.hide(privateObj.backdrop);
                     MosaicProcessor.stopDrawing();
                     img.src = reader.result;
                 };
@@ -212,4 +214,4 @@ var MosaicPageController = (function (MosaicProcessor) {
     };
 
     return publicObj;
-}(MosaicProcessor));
+}(MosaicProcessor, StyleTool));
