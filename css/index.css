@@ -21,30 +21,38 @@ body {
 
 /*Header*/
 .header {
-    height: 100px;
+    /*height: 100px;*/
     background-color: #3F4651;
-    position: relative;
+    /*position: relative;*/
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+}
+
+.header .item{
+    width: 50%;
+    align-self: center;
 }
 
 .logo {
-    padding: 10px 0 0 30px;
+    padding: 10px 0 10px 30px;
 }
 
 .logo img {
-    width: 70px;
+    max-width: 70px;
 }
 
 .submit-button {
     text-align: center;
-    width: 200px;
+    /*width: 50%;*/
     height: 30px;
     cursor: pointer;
+    float: right;
+    margin-right: 30px;
 }
 
 #input-button.submit-button {
-    position: absolute;
-    right: 30px;
-    top: 30px;
     font-size: 20px;
 }
 
@@ -79,4 +87,17 @@ div.mosaic-row svg {
     width: 100%;
     text-align: center;
     margin-top: 30%;
+}
+
+/*Small Screen*/
+@media only screen and (max-width: 800px) {
+
+    .logo img {
+        min-width: 10%;
+        max-width: 40%;
+    }
+
+    #input-button.submit-button {
+        font-size: 2em;
+    }
 }
