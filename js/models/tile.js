@@ -28,8 +28,8 @@ function Tile(width, height) {
             tileHeight = that.height,
             numOfPixels = getNumOfPixels(tileWidth, tileHeight);
         unadjustedTileWidth = unadjustedTileWidth || tileWidth;
-        for (y; y < tileHeight; y += 1) { // loop over each row within the tile
-            for (x = 0; x < tileWidth; x += 1) { // loop over each pixel in the tile row
+        for (y; y < tileHeight; y += 1) {// loop over each row within the tile
+            for (x = 0; x < tileWidth; x += 1) {// loop over each pixel in the tile row
                 dataIndex = getDataIndex(x, y, canvasWidth, unadjustedTileWidth, currentTileIndex);
                 r += rowPixelData[dataIndex];
                 g += rowPixelData[dataIndex + 1];

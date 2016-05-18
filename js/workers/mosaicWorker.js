@@ -31,7 +31,7 @@ onmessage = function (e) {
         currentTile = new Tile(tileWidth, tileHeight),
         mosaicRowUI = new MosaicRowUI();//set the default tile width and tile height
 
-    //adjust current tile height
+    // adjust current tile height
     if (tileRowYInImg + tileHeight > canvasHeight) {
         currentTile.height = canvasHeight - tileRowYInImg;
     }

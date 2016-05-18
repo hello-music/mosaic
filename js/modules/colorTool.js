@@ -5,8 +5,8 @@
 var ColorTool = (function () {
     'use strict';
 
-    var privateObj = {}, // private module properties and methods
-        publicObj = {}; // public API interface obj
+    var privateObj = {},// private module properties and methods
+        publicObj = {};// public API interface obj
 
     privateObj = {
         /**

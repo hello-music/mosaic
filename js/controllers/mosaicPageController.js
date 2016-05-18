@@ -5,8 +5,8 @@
 var MosaicPageController = (function (MosaicProcessor) {
     'use strict';
 
-    var privateObj = {}, // private module properties and methods
-        publicObj = {}; // public API interface obj
+    var privateObj = {},// private module properties and methods
+        publicObj = {};// public API interface obj
     /**
      * @type {{tileWidth: number, tileHeight: number, addImgButton: Element, hiddenInput: Element, canvas: Element,
      *     mosaicContainer: Element, initMosaicContainer: privateObj.initMosaicContainer, addBindings:
@@ -131,15 +131,15 @@ var MosaicPageController = (function (MosaicProcessor) {
          */
         processImgMosaic: function () {
             var canvas = privateObj.canvas,
-                mosaicRowNum = 0; // starting row number of the mosaic tiled image;
+                mosaicRowNum = 0;// starting row number of the mosaic tiled image;
 
-            privateObj.initMosaicContainer(); // initilise mosaic container: empty its content and set width and height
+            privateObj.initMosaicContainer();// initilise mosaic container: empty its content and set width and height
             MosaicProcessor.init(privateObj.tileWidth,
                 privateObj.tileHeight,
                 canvas.width,
                 canvas.height,
                 privateObj.getNumOfTilesX(),
-                privateObj.getNumOfTilesY()); // initilise the Mosaic Processor
+                privateObj.getNumOfTilesY());// initilise the Mosaic Processor
             // start drawing the mosaic image
             MosaicProcessor.drawMosaic(privateObj.getCanvasContext(), mosaicRowNum, privateObj.mosaicContainer);
         },
@@ -170,8 +170,8 @@ var MosaicPageController = (function (MosaicProcessor) {
                     return function () {
                         MosaicProcessor.stopDrawing();
                         img.src = reader.result;
-                        privateObj.initCanvas(img); // initialise the width and height of canvas
-                        privateObj.drawImgOnCanvas(img); // draw image on the canvas, scale up/down for the screen size
+                        privateObj.initCanvas(img);// initialise the width and height of canvas
+                        privateObj.drawImgOnCanvas(img);// draw image on the canvas, scale up/down for the screen size
                         // on canvas
                         privateObj.processImgMosaic();
                     };

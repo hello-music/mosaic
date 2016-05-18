@@ -5,8 +5,8 @@
 var MosaicProcessor = (function (CONSTANTS) {
     'use strict';
 
-    var privateObj = {}, // private module properties and methods
-        publicObj = {}; // public API interface obj
+    var privateObj = {},// private module properties and methods
+        publicObj = {};// public API interface obj
 
     /**
      *
@@ -41,11 +41,10 @@ var MosaicProcessor = (function (CONSTANTS) {
         /**
          * Draw current mosaic row on the mosaic img container
          * @param {Element} mosaicContainer
-         * @param {string} rowImagesString
+         * @param {string} rowImagesString - @example '<div><svg></svg><div>'
          */
         drawCurrentRow: function (mosaicContainer, rowImagesString) {
             mosaicContainer.innerHTML += rowImagesString;// rowImagesString is in string of div containing the svgs,
-                                                         // e.g. '<div><svg></svg><div>'
         },
         /**
          * Draw mosaic row in the mosaic container
@@ -56,20 +55,20 @@ var MosaicProcessor = (function (CONSTANTS) {
          * @param mosaicContainer - the dom container that the mosaic img will be in
          */
         drawMosaic: function (canvasCtx, mosaicRowNum, mosaicContainer) {
-                // tile
+            // tile
             var tileWidth = privateObj.tileWidth,
                 tileHeight = privateObj.tileHeight,
-                // img
+            // img
                 canvasWidth = privateObj.canvasWidth,
                 canvasHeight = privateObj.canvasHeight,
-                // num of tiles
+            // num of tiles
                 numOfTilesX = privateObj.numOfTilesX,
                 numOfTilesY = privateObj.numOfTilesY,
-                // tile row upper left pixel y
+            // tile row upper left pixel y
                 tileRowYInImg = mosaicRowNum * tileHeight,
-                // img row data of the tile row
+            // img row data of the tile row
                 imgRowData = canvasCtx.getImageData(0, tileRowYInImg, canvasWidth, tileHeight),
-                //worker that will be processing and returning the mosaic row
+            //worker that will be processing and returning the mosaic row
                 worker = privateObj.getMosaicWorker();
 
             worker.postMessage({
@@ -87,7 +86,7 @@ var MosaicProcessor = (function (CONSTANTS) {
                 privateObj.drawCurrentRow(mosaicContainer, e.data);
                 //check if need to draw next row
                 mosaicRowNum += 1;
-                if (mosaicRowNum === numOfTilesY) { // all the image rows have been processed
+                if (mosaicRowNum === numOfTilesY) {// all the image rows have been processed
                     privateObj.clearWorker();
                 } else {
                     // draw next row
