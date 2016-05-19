@@ -1,3 +1,7 @@
+/**
+ * Detect devices: mobile, desktop, browser, etc
+ * @module DeviceDetector
+ */
 var DeviceDetector = (function () {
     'use strict';
     var privateObj = {},// private module properties and methods
@@ -9,6 +13,7 @@ var DeviceDetector = (function () {
         },
 
         isIOS: function () {
+            alert('is IOS');
             return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         }
     };

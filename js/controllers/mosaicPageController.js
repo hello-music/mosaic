@@ -1,9 +1,9 @@
 /**
  * Current page controller
  * @module MosaicPageController
- * needs {@link module:MosaicProcessor} and {@link module:StyleTool}
+ * needs {@link module:MosaicProcessor}
  */
-var MosaicPageController = (function (MosaicProcessor, StyleTool) {
+var MosaicPageController = (function (MosaicProcessor) {
     'use strict';
 
     var privateObj = {},// private module properties and methods
@@ -29,8 +29,12 @@ var MosaicPageController = (function (MosaicProcessor, StyleTool) {
         mosaicContainer: document.querySelector('#mosaic-container'),
         // the container that contains both the canvas and the mosaic container
         normalNMosaicRow: document.querySelector('#normal-n-mosaic-row'),
-        // backdrop
-        backdrop: document.querySelector('#backdrop'),
+        clearImgs: function () {
+            var canvas = privateObj.canvas,
+                context = canvas.getContext('2d');
+            privateObj.mosaicContainer.innerHTML = '';
+            context.clearRect(0, 0, canvas.width, canvas.height);
+        },
         /**
          * Get half of the {@link privateObj.normalNMosaicRow} clientWidth and minus a tile width to make sure this row
          * can container both the canvas and the mosaic img
@@ -160,16 +164,16 @@ var MosaicPageController = (function (MosaicProcessor, StyleTool) {
 
             if (selectedFile) {
                 reader.onloadstart = function () {
-                    StyleTool.show(privateObj.backdrop);
+                    privateObj.clearImgs();
+                    Modal.show();
+                    MosaicProcessor.stopDrawing();
                 };
                 reader.onload = function () {
-                    StyleTool.hide(privateObj.backdrop);
-                    MosaicProcessor.stopDrawing();
+                    Modal.hide();
                     img.src = reader.result;
                 };
 
                 img.onload = function () {
-                    console.log('img loaded');
                     privateObj.initCanvas(img);// initialise the width and height of canvas
                     privateObj.drawImgOnCanvas(img);// draw image on the canvas, scale up/down for the screen size
                     // on  canvas
@@ -195,4 +199,4 @@ var MosaicPageController = (function (MosaicProcessor, StyleTool) {
     };
 
     return publicObj;
-}(MosaicProcessor, StyleTool));
+}(MosaicProcessor, DeviceDetector, Modal));

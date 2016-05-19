@@ -12,6 +12,7 @@ var CONSTANTS = (function () {
     privateObj = {
         COLOR_URL: '/color/',
         MOSAIC_WORKER_JS_FILE_URL: 'js/workers/mosaicWorker.js',
+        BACKDROP_ID: 'backdrop',
         /**
          * Get value based on the key
          * @param {string} key
