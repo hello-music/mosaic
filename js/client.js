@@ -1,7 +1,7 @@
 document.onreadystatechange = function () {
     'use strict';
     if (document.readyState === 'complete') {
-        // start the app
+        // Only support chrome browser and IOS devices
         if (DeviceDetector.isChrome() || DeviceDetector.isIOS()) {
             MosaicPageController.init(TILE_WIDTH, TILE_HEIGHT);
         }
