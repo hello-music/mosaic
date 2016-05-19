@@ -9,6 +9,10 @@ var Modal = (function (StyleTool, CONSTANTS) {
 
     privateObj = {
         backdrop: document.querySelector('#' + CONSTANTS.get('BACKDROP_ID')),
+        /**
+         * Set the content of Modal
+         * @param {string} content
+         */
         setContent: function (content) {
             /**
              * @todo make it load template rather than hard coded
@@ -16,9 +20,19 @@ var Modal = (function (StyleTool, CONSTANTS) {
              */
             privateObj.backdrop.innerHTML = '<div class="content">' + content + '</div>';
         },
-        show: function () {
+        /**
+         * Show modal on the page
+         * @param {?string} content - dom string, @example '<div class="content">some content</div>'
+         */
+        show: function (content) {
+            if (content !== null) {
+                privateObj.setContent(content);
+            }
             StyleTool.show(privateObj.backdrop);
         },
+        /**
+         * Hide modal
+         */
         hide: function () {
             StyleTool.hide(privateObj.backdrop);
         }
