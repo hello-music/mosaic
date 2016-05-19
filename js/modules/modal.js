@@ -25,7 +25,7 @@ var Modal = (function (StyleTool, CONSTANTS) {
          * @param {?string} content - dom string, @example '<div class="content">some content</div>'
          */
         show: function (content) {
-            if (content !== null) {
+            if (content !== null && content !== undefined) {
                 privateObj.setContent(content);
             }
             StyleTool.show(privateObj.backdrop);
