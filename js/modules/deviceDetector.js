@@ -8,12 +8,19 @@ var DeviceDetector = (function () {
         publicObj = {};// public API interface obj
 
     privateObj = {
+        /**
+         * Detect if browser is Chrome
+         * @returns {boolean}
+         */
         isChrome: function () {
             return navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
         },
 
+        /**
+         * Detect if IOS devices
+         * @returns {boolean}
+         */
         isIOS: function () {
-            alert('is IOS');
             return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         }
     };

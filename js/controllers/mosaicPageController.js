@@ -1,9 +1,9 @@
 /**
  * Current page controller
  * @module MosaicPageController
- * needs {@link module:MosaicProcessor}
+ * needs {@link module:MosaicProcessor} and {@link module:Modal}
  */
-var MosaicPageController = (function (MosaicProcessor) {
+var MosaicPageController = (function (MosaicProcessor, Modal) {
     'use strict';
 
     var privateObj = {},// private module properties and methods
@@ -29,6 +29,11 @@ var MosaicPageController = (function (MosaicProcessor) {
         mosaicContainer: document.querySelector('#mosaic-container'),
         // the container that contains both the canvas and the mosaic container
         normalNMosaicRow: document.querySelector('#normal-n-mosaic-row'),
+        // modal uploading content
+        modalContent: 'Image uploading . . .',
+        init: function () {
+            Modal.setContent(privateObj.modalContent);
+        },
         clearImgs: function () {
             var canvas = privateObj.canvas,
                 context = canvas.getContext('2d');
@@ -169,11 +174,11 @@ var MosaicPageController = (function (MosaicProcessor) {
                     MosaicProcessor.stopDrawing();
                 };
                 reader.onload = function () {
-                    Modal.hide();
                     img.src = reader.result;
                 };
 
                 img.onload = function () {
+                    Modal.hide();
                     privateObj.initCanvas(img);// initialise the width and height of canvas
                     privateObj.drawImgOnCanvas(img);// draw image on the canvas, scale up/down for the screen size
                     // on  canvas
@@ -194,9 +199,10 @@ var MosaicPageController = (function (MosaicProcessor) {
         init: function (tileWidth, tileHeight) {
             privateObj.tileWidth = tileWidth;
             privateObj.tileHeight = tileHeight;
+            privateObj.init();
             privateObj.addBindings();
         }
     };
 
     return publicObj;
-}(MosaicProcessor, DeviceDetector, Modal));
+}(MosaicProcessor, Modal));
