@@ -44,11 +44,7 @@ var MosaicProcessor = (function (CONSTANTS) {
          * @param {string} rowImagesString - @example '<div><svg></svg><div>'
          */
         drawCurrentRow: function (rowImagesString) {
-            //privateObj.mosaicContainer.innerHTML += rowImagesString;
-            //privateObj.mosaicContainer.innerHTML = rowImagesString;
-            privateObj.mosaicContainer.appendChild(new MosaicRowUI(rowImagesString));//rowImagesString is in string
-            // of div
-                                                                          // containing the svgs,
+            privateObj.mosaicContainer.appendChild(new MosaicRowUI(rowImagesString));
         },
         /**
          * Draw mosaic row in the mosaic container

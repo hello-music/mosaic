@@ -133,10 +133,11 @@ var MosaicPageController = (function (MosaicProcessor, Modal) {
          */
         addBindings: function () {
             var inputElement = privateObj.hiddenInput,
-                inputButton = privateObj.addImgButton;
-            inputButton.onclick = function () {
-                inputElement.click();
-            };
+                inputButton = privateObj.addImgButton,
+                inputElementClick = function () {
+                    inputElement.click();
+                };
+            inputButton.onclick = inputElementClick;
             inputElement.onchange = privateObj.handleFiles;
         },
         /**
