@@ -21,6 +21,7 @@ var MosaicProcessor = (function (CONSTANTS) {
         canvasHeight: 0,
         mosaicWorker: null,
         canvasCtx: null,
+        mosaicContainer: null,
         /**
          * Get the Mosaic Worker, will create a new one if it is null
          * @returns {Worker} mosaicWorker {@link privateObj.mosaicWorker}
@@ -40,11 +41,14 @@ var MosaicProcessor = (function (CONSTANTS) {
         },
         /**
          * Draw current mosaic row on the mosaic img container
-         * @param {Element} mosaicContainer
          * @param {string} rowImagesString - @example '<div><svg></svg><div>'
          */
-        drawCurrentRow: function (mosaicContainer, rowImagesString) {
-            mosaicContainer.innerHTML += rowImagesString;// rowImagesString is in string of div containing the svgs,
+        drawCurrentRow: function (rowImagesString) {
+            //privateObj.mosaicContainer.innerHTML += rowImagesString;
+            //privateObj.mosaicContainer.innerHTML = rowImagesString;
+            privateObj.mosaicContainer.appendChild(new MosaicRowUI(rowImagesString));//rowImagesString is in string
+            // of div
+                                                                          // containing the svgs,
         },
         /**
          * Draw mosaic row in the mosaic container
@@ -54,7 +58,7 @@ var MosaicProcessor = (function (CONSTANTS) {
          * @param mosaicRowNum - the row number the current row in the tiled img
          * @param mosaicContainer - the dom container that the mosaic img will be in
          */
-        drawMosaic: function (canvasCtx, mosaicRowNum, mosaicContainer) {
+        drawMosaic: function (canvasCtx, mosaicRowNum) {
             // tile
             var tileWidth = privateObj.tileWidth,
                 tileHeight = privateObj.tileHeight,
@@ -83,14 +87,14 @@ var MosaicProcessor = (function (CONSTANTS) {
 
             worker.onmessage = function (e) {
                 //draw current row
-                privateObj.drawCurrentRow(mosaicContainer, e.data);
+                privateObj.drawCurrentRow(e.data);
                 //check if need to draw next row
                 mosaicRowNum += 1;
                 if (mosaicRowNum === numOfTilesY) {// all the image rows have been processed
                     privateObj.clearWorker();
                 } else {
                     // draw next row
-                    privateObj.drawMosaic(canvasCtx, mosaicRowNum, mosaicContainer);
+                    privateObj.drawMosaic(canvasCtx, mosaicRowNum);
                 }
             };
         }
@@ -107,17 +111,20 @@ var MosaicProcessor = (function (CONSTANTS) {
          * @param {number} canvasHeight
          * @param {number} numOfTilesX
          * @param {number} numOfTilesY
+         * @param {Element} mosaicContainer
          */
-        init: function (tileWidth, tileHeight, canvasWidth, canvasHeight, numOfTilesX, numOfTilesY) {
+        init: function (tileWidth, tileHeight, canvasWidth, canvasHeight, numOfTilesX, numOfTilesY, mosaicContainer) {
             // tile
             privateObj.tileWidth = tileWidth;
             privateObj.tileHeight = tileHeight;
             // img
             privateObj.canvasWidth = canvasWidth;
             privateObj.canvasHeight = canvasHeight;
-            //num of tiles
+            // num of tiles
             privateObj.numOfTilesX = numOfTilesX;
             privateObj.numOfTilesY = numOfTilesY;
+            // mosaic container
+            privateObj.mosaicContainer = mosaicContainer;
         },
         /**
          * public api to draw the mosaic row

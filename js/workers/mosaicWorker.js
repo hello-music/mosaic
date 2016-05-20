@@ -7,7 +7,7 @@
 
 importScripts('../modules/constants.js', '../modules/http.js',
     '../modules/colorTool.js', '../modules/mosaicWorkerHelper.js',
-    '../models/tile.js', '../models/mosaicRowUI.js');
+    '../models/tile.js');
 
 onmessage = function (e) {
     'use strict';
@@ -28,23 +28,16 @@ onmessage = function (e) {
         rowContent = [],// stores the svg images in the order of tile position in the row
         currentTileIndex = 0,// current tile's index in the tile row, 0 - (number of tiles in the row -1)
         avgRGB = {},
-        currentTile = new Tile(tileWidth, tileHeight),
-        mosaicRowUI = new MosaicRowUI();//set the default tile width and tile height
+        currentTile = new Tile(tileWidth, tileHeight);
 
     // adjust current tile height
-    if (tileRowYInImg + tileHeight > canvasHeight) {
-        currentTile.height = canvasHeight - tileRowYInImg;
-    }
+    currentTile.height = MosaicWorkerHelper.getAdjustedTileHeight(tileRowYInImg, tileHeight, canvasHeight);
 
     // calculate avg color
     for (currentTileIndex; currentTileIndex < numOfTilesInRow; currentTileIndex += 1) {// loop over each tile in the row
         currentTileXInImg = currentTileIndex * tileWidth;// reset current tile row X in img
         // adjust tile width
-        if (currentTileXInImg + tileWidth > canvasWidth) {
-            currentTile.width = canvasWidth - currentTileXInImg;
-        } else {
-            currentTile.width = tileWidth;
-        }
+        currentTile.width = MosaicWorkerHelper.getAdjustedTileWidth(currentTileXInImg, tileWidth, canvasWidth);
         // calculate avg rgb of current tile
         avgRGB = currentTile.getAvgRBG(pixelData, canvasWidth, currentTileIndex, tileWidth);
         // convert rgb to hex
@@ -58,7 +51,7 @@ onmessage = function (e) {
             completedAjax += 1;
             if (completedAjax === numOfTilesInRow) {// all promises have been completed
                 svgContent = rowContent.join('');
-                MosaicWorkerHelper.returnImgRow(mosaicRowUI, svgContent);
+                postMessage(svgContent);
             }
         });
     }

@@ -33,6 +33,7 @@ var MosaicPageController = (function (MosaicProcessor, Modal) {
         modalContent: 'Image uploading . . .',
         init: function () {
             Modal.setContent(privateObj.modalContent);
+            privateObj.addBindings();
         },
         clearImgs: function () {
             var canvas = privateObj.canvas,
@@ -145,15 +146,17 @@ var MosaicPageController = (function (MosaicProcessor, Modal) {
             var canvas = privateObj.canvas,
                 mosaicRowNum = 0;// starting row number of the mosaic tiled image;
 
-            privateObj.initMosaicContainer();// initilise mosaic container: empty its content and set width and height
+            privateObj.initMosaicContainer();// initialise mosaic container: empty its content and set width and height
+            // initialise the Mosaic Processor
             MosaicProcessor.init(privateObj.tileWidth,
                 privateObj.tileHeight,
                 canvas.width,
                 canvas.height,
                 privateObj.getNumOfTilesX(),
-                privateObj.getNumOfTilesY());// initilise the Mosaic Processor
+                privateObj.getNumOfTilesY(),
+                privateObj.mosaicContainer);
             // start drawing the mosaic image
-            MosaicProcessor.drawMosaic(privateObj.getCanvasContext(), mosaicRowNum, privateObj.mosaicContainer);
+            MosaicProcessor.drawMosaic(privateObj.getCanvasContext(), mosaicRowNum);
         },
 
         /**
@@ -165,26 +168,28 @@ var MosaicPageController = (function (MosaicProcessor, Modal) {
             var fileList = this.files,
                 selectedFile = fileList[0],
                 img = new Image(),
-                reader = new FileReader();
-
-            if (selectedFile) {
-                reader.onloadstart = function () {
+                reader = new FileReader(),
+                imgStartUploadingHandler = function () {
                     privateObj.clearImgs();
                     Modal.show();
                     MosaicProcessor.stopDrawing();
-                };
-                reader.onload = function () {
+                },
+                imgUploadedHandler = function () {
                     img.src = reader.result;
+                },
+                imgLoadedHandler = function () {
+                    Modal.hide();
+                    // initialise the width and height of canvas
+                    privateObj.initCanvas(img);
+                    // draw image on the canvas, scale up/down for the screen size on canvas
+                    privateObj.drawImgOnCanvas(img);
+                    privateObj.processImgMosaic();
                 };
 
-                img.onload = function () {
-                    Modal.hide();
-                    privateObj.initCanvas(img);// initialise the width and height of canvas
-                    privateObj.drawImgOnCanvas(img);// draw image on the canvas, scale up/down for the screen size
-                    // on  canvas
-                    privateObj.processImgMosaic();
-                }
-
+            if (selectedFile) {
+                reader.onloadstart = imgStartUploadingHandler;
+                reader.onload = imgUploadedHandler;
+                img.onload = imgLoadedHandler;
                 reader.readAsDataURL(selectedFile);
             }
         }
@@ -200,7 +205,6 @@ var MosaicPageController = (function (MosaicProcessor, Modal) {
             privateObj.tileWidth = tileWidth;
             privateObj.tileHeight = tileHeight;
             privateObj.init();
-            privateObj.addBindings();
         }
     };
 

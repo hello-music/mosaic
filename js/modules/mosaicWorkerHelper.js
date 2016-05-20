@@ -12,8 +12,7 @@ var MosaicWorkerHelper = (function (CONSTANTS, HTTP) {
         publicObj = {};// public API interface obj
     /**
      * Private object
-     * @type {{returnResponse: privateObj.getResponse, handleError: privateObj.handleError, returnImgRow:
-     *     privateObj.returnImgRow, getTile: privateObj.getTile}}
+     * @type {{}}
      */
     privateObj = {
         /**
@@ -32,16 +31,6 @@ var MosaicWorkerHelper = (function (CONSTANTS, HTTP) {
             alert('Had error fetching tiles: ' + error);
         },
         /**
-         *
-         * @param {@link MosaicRowUI} mosaicRow - the current mosaicRow UI object
-         * @param {string} svgContent - svg content in string format
-         * @example '<svg><ellipse/></svg>' the ellipse should have proper content
-         */
-        returnImgRow: function (mosaicRow, svgContent) {
-            mosaicRow.addContent(svgContent);
-            postMessage(mosaicRow.row);
-        },
-        /**
          * Fetch the tile image from server
          * @param hexColor
          * @param currentTileIndex
@@ -52,6 +41,32 @@ var MosaicWorkerHelper = (function (CONSTANTS, HTTP) {
                 privateObj.getResponse,
                 privateObj.handleError
             );
+        },
+        /**
+         *
+         * @param currentTileXInImg
+         * @param tileWidth
+         * @param canvasWidth
+         * @returns {*}
+         */
+        getAdjustedTileWidth: function (currentTileXInImg, tileWidth, canvasWidth) {
+            if (currentTileXInImg + tileWidth > canvasWidth) {
+                return canvasWidth - currentTileXInImg;
+            }
+            return tileWidth;
+        },
+        /**
+         *
+         * @param tileRowYInImg
+         * @param tileHeight
+         * @param canvasHeight
+         * @returns {*}
+         */
+        getAdjustedTileHeight: function (tileRowYInImg, tileHeight, canvasHeight) {
+            if (tileRowYInImg + tileHeight > canvasHeight) {
+                return canvasHeight - tileRowYInImg;
+            }
+            return tileHeight;
         }
     };
 

@@ -6,8 +6,7 @@ document.onreadystatechange = function () {
             MosaicPageController.init(TILE_WIDTH, TILE_HEIGHT);
         }
         else {
-            Modal.setContent('Please use Chrome');
-            Modal.show();
+            Modal.show('Please use Chrome');
         }
     }
 };
