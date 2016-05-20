@@ -72,7 +72,9 @@ var MosaicWorkerHelper = (function (CONSTANTS, HTTP) {
 
     publicObj = {
         returnImgRow: privateObj.returnImgRow,
-        getTile: privateObj.getTile
+        getTile: privateObj.getTile,
+        getAdjustedTileWidth: privateObj.getAdjustedTileWidth,
+        getAdjustedTileHeight: privateObj.getAdjustedTileHeight
     };
 
     return publicObj;
