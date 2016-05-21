@@ -74,7 +74,16 @@ var MosaicWorkerHelper = (function (CONSTANTS, HTTP) {
         returnImgRow: privateObj.returnImgRow,
         getTile: privateObj.getTile,
         getAdjustedTileWidth: privateObj.getAdjustedTileWidth,
-        getAdjustedTileHeight: privateObj.getAdjustedTileHeight
+        getAdjustedTileHeight: privateObj.getAdjustedTileHeight,
+        /**
+         * Get the x of current tile in the image grid
+         * @param {number} currentTileIndex - tile index x in the row, 0 ~ (rowNum - 1)
+         * @param {number} tileWidth
+         * @returns {number}
+         */
+        getCurrentTileXInImg: function (currentTileIndex, tileWidth){
+            return currentTileIndex * tileWidth;
+        }
     };
 
     return publicObj;

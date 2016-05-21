@@ -35,7 +35,8 @@ onmessage = function (e) {
 
     // calculate avg color
     for (currentTileIndex; currentTileIndex < numOfTilesInRow; currentTileIndex += 1) {// loop over each tile in the row
-        currentTileXInImg = currentTileIndex * tileWidth;// reset current tile row X in img
+        currentTileXInImg = MosaicWorkerHelper.getCurrentTileXInImg(currentTileIndex, tileWidth);// reset current tile
+        // row X in img
         // adjust tile width
         currentTile.width = MosaicWorkerHelper.getAdjustedTileWidth(currentTileXInImg, tileWidth, canvasWidth);
         // calculate avg rgb of current tile
